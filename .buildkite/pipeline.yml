@@ -1,0 +1,6 @@
+steps:
+  - command: "go build -o dist/hello ./hello"
+    artifact_paths: "./dist/hello"
+    plugins:
+      - docker#v5.13.0:
+          image: "golang:1.18.0"
