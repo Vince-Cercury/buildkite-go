@@ -1,21 +1,4 @@
-# steps:
-#   - label: "🔨 Test"
-#     command: |
-#      go install github.com/jstemmer/go-junit-report/v2@latest
-
-#      cd hello && go test -v 2>&1 | /go/bin/go-junit-report -set-exit-code > junit-report.xml
-#     #  buildkite-test-collector junit --file junit-report.xml
-#     artifact_paths: "hello/junit-report.xml"
-#     plugins:
-#       - docker#v5.13.0:
-#           environment:
-#             - BUILDKITE_ANALYTICS_TOKEN
-#           image: "golang:1.18.0"
-#       - test-collector#v1.11.0:
-#           files: "hello/junit-*.xml"
-#           format: "junit"
-  # Run tests and upload
-
+steps:
   - label: "🔨 Test"
     key: "tests"
     command: |
@@ -45,8 +28,24 @@
       - docker#v5.13.0:
           image: "golang:1.18.0"
 
-  - block: "Question"
-    prompt: "What's your name?"
+  - input: "What's your name?"
+    key: "question"
     fields:
       - text: "What is your name?"
-        key: "user-name"
+        key: "name"
+
+  - label: "Run Hello World"
+    agents:
+      queue: gcloud
+    depends_on: "question"
+    command: |
+      #!/bin/bash
+
+      NAME=$(buildkite-agent meta-data get "name")
+      echo 'my name is $NAME'
+
+      mkdir -p bins && cd bins
+      buildkite-agent artifact download "dist/hello" .
+      chmod +x dist/hello
+
+      ./dist/hello $NAME
