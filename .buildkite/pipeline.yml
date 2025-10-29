@@ -53,7 +53,7 @@
 
   - label: "Run Hello World"
     command: |
-      buildkite-agent artifact download "dist/hello" my-hello
+      buildkite-agent artifact download "dist/hello" --destination my-hello
       NAME=$(buildkite-agent meta-data get "user-name")
       chmod +x my-hello
       ./my-hello $NAME
