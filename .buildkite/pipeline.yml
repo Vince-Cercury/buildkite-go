@@ -46,12 +46,14 @@
           image: "golang:1.18.0"
 
   - block: "Question"
+    key: "question"
     prompt: "What's your name?"
     fields:
       - text: "What is your name?"
         key: "name"
 
   - label: "Run Hello World"
+    depends_on: "question"
     command: |
       #!/bin/bash
       mkdir bins && cd bins
