@@ -57,9 +57,16 @@
       #!/bin/bash
       mkdir bins && cd bins
       buildkite-agent artifact download "dist/hello" .
-      NAME=$(buildkite-agent meta-data get "name" --debug)
-      echo $NAME
+
+      # Debug: List all available meta-data keys
+      echo "Checking available meta-data keys..."
+      buildkite-agent meta-data keys
+
+      # Try different possible key formats
+      NAME=$(buildkite-agent meta-data get "name" 2>/dev/null || buildkite-agent meta-data get "question-name" 2>/dev/null || echo "")
+      echo "Retrieved NAME: '$NAME'"
+
       chmod +x dist/hello
-      ./dist/hello $NAME
+      ./dist/hello "$NAME"
     agents:
       queue: "default" # Or a specific queue for your EC2 agents
