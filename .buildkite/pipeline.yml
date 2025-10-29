@@ -53,12 +53,12 @@
 
   - label: "Run Hello World"
     command: |
-      mkdir bins
-      cd bins
+      echo 'Saying hi to $(buildkite-agent meta-data get "user-name")'
+      mkdir bins && cd bins
       buildkite-agent artifact download "dist/hello" .
       NAME=$(buildkite-agent meta-data get "user-name")
       echo $NAME
-      ls -al
+      ls -al dist/
       chmod +x dist/hello
       ./dist/hello $NAME
     agents:
