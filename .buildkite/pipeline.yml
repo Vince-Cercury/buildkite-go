@@ -4,3 +4,8 @@ steps:
     plugins:
       - docker#v5.13.0:
           image: "golang:1.18.0"
+  - block: "Question"
+    prompt: "What's your name?"
+    fields:
+      - text: "What is your name?"
+        key: "user-name"
