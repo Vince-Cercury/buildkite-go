@@ -18,9 +18,9 @@ steps:
 
   - label: "🔨 Test"
     command: |
-     go install github.com/jstemmer/go-junit-report/v2@latest
+      go install github.com/jstemmer/go-junit-report/v2@latest
 
-     cd hello && go test -v 2>&1 | /go/bin/go-junit-report -set-exit-code > junit-report.xml"
+      cd hello && go test -v 2>&1 | /go/bin/go-junit-report -set-exit-code > junit-report.xml
     artifact_paths: "hello/junit-report.xml"
     plugins:
       - docker#v5.13.0:
@@ -28,6 +28,7 @@ steps:
       - test-collector#v1.11.0:
           files: "hello/junit-*.xml"
           format: "junit"
+
   - wait
 
   - label: "🔍 Test Engine"
@@ -36,11 +37,13 @@ steps:
       - test-collector#v1.11.0:
           files: "tests-*.xml"
           format: "junit"
+
   - command: "go build -o dist/hello ./hello"
     artifact_paths: "./dist/hello"
     plugins:
       - docker#v5.13.0:
           image: "golang:1.18.0"
+
   - block: "Question"
     prompt: "What's your name?"
     fields:
