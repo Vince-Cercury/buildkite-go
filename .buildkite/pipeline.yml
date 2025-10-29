@@ -41,11 +41,8 @@ steps:
     command: |
       #!/bin/bash
 
-      NAME=$(buildkite-agent meta-data get "name")
-      echo 'my name is $NAME'
-
       mkdir -p bins && cd bins
       buildkite-agent artifact download "dist/hello" .
       chmod +x dist/hello
 
-      ./dist/hello $NAME
+      ./dist/hello $(buildkite-agent meta-data get name)
