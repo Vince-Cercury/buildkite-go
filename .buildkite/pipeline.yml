@@ -1,9 +1,50 @@
-steps:
+# steps:
+#   - label: "🔨 Test"
+#     command: |
+#      go install github.com/jstemmer/go-junit-report/v2@latest
+
+#      cd hello && go test -v 2>&1 | /go/bin/go-junit-report -set-exit-code > junit-report.xml
+#     #  buildkite-test-collector junit --file junit-report.xml
+#     artifact_paths: "hello/junit-report.xml"
+#     plugins:
+#       - docker#v5.13.0:
+#           environment:
+#             - BUILDKITE_ANALYTICS_TOKEN
+#           image: "golang:1.18.0"
+#       - test-collector#v1.11.0:
+#           files: "hello/junit-*.xml"
+#           format: "junit"
+  # Run tests and upload
+
+  - label: "🔨 Test"
+    key: "tests"
+    command: |
+      go install github.com/jstemmer/go-junit-report/v2@latest
+
+      cd hello && go test -v 2>&1 | /go/bin/go-junit-report -set-exit-code > junit-report.xml
+    artifact_paths: "hello/junit-report.xml"
+    plugins:
+      - docker#v5.13.0:
+          image: "golang:1.18.0"
+
+  - wait
+
+  - label: "🔍 Test Engine"
+    depends_on: "tests"
+    command: buildkite-agent artifact download "hello/junit-report.xml" .
+    plugins:
+      - test-collector#v1.11.0:
+          files: "hello/junit-report.xml"
+          format: "junit"
+    secrets:
+      BUILDKITE_ANALYTICS_TOKEN: MY_BUILDKITE_ANALYTICS_TOKEN_SECRET
+
   - command: "go build -o dist/hello ./hello"
     artifact_paths: "./dist/hello"
     plugins:
       - docker#v5.13.0:
           image: "golang:1.18.0"
+
   - block: "Question"
     prompt: "What's your name?"
     fields:
