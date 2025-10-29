@@ -1,9 +1,51 @@
 steps:
+  - label: "🔨 Test"
+    key: "tests"
+    command: |
+      go install github.com/jstemmer/go-junit-report/v2@latest
 
-- label: "Kubectl version :congratulations: :champagne:"
-  agents:
-    queue: gcloud
-  command: |
-    echo $(date)
-    go build -o dist/hello ./hello
+      cd hello && go test -v 2>&1 | /go/bin/go-junit-report -set-exit-code > junit-report.xml
+    artifact_paths: "hello/junit-report.xml"
+    plugins:
+      - docker#v5.13.0:
+          image: "golang:1.18.0"
 
+  - wait
+
+  - label: "🔍 Test Engine"
+    depends_on: "tests"
+    command: buildkite-agent artifact download "hello/junit-report.xml" .
+    plugins:
+      - test-collector#v1.11.0:
+          files: "hello/junit-report.xml"
+          format: "junit"
+    secrets:
+      BUILDKITE_ANALYTICS_TOKEN: MY_BUILDKITE_ANALYTICS_TOKEN_SECRET
+
+  - command: "go build -o dist/hello ./hello"
+    artifact_paths: "./dist/hello"
+    plugins:
+      - docker#v5.13.0:
+          image: "golang:1.18.0"
+
+  - input: "What's your name?"
+    key: "question"
+    fields:
+      - text: "What is your name?"
+        key: "name"
+
+  - label: "Run Hello World"
+    agents:
+      queue: gcloud
+    depends_on: "question"
+    command: |
+      #!/bin/bash
+
+      NAME=$(buildkite-agent meta-data get "name")
+      echo 'my name is $NAME'
+
+      mkdir -p bins && cd bins
+      buildkite-agent artifact download "dist/hello" .
+      chmod +x dist/hello
+
+      ./dist/hello $NAME
