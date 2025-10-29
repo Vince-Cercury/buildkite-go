@@ -31,10 +31,10 @@
 
   - label: "🔍 Test Engine"
     depends_on: "tests"
-    command: buildkite-agent artifact download "tests-*.xml" .
+    command: buildkite-agent artifact download "hello/junit-report.xml" .
     plugins:
       - test-collector#v1.11.0:
-          files: "tests-*.xml"
+          files: "hello/junit-report.xml"
           format: "junit"
           environment:
             - BUILDKITE_ANALYTICS_TOKEN: AovmSRd8i6y34rqvt8poPgxZ
