@@ -49,15 +49,14 @@
     prompt: "What's your name?"
     fields:
       - text: "What is your name?"
-        key: "user-name"
+        key: "name"
 
   - label: "Run Hello World"
     command: |
       #!/bin/bash
       mkdir bins && cd bins
       buildkite-agent artifact download "dist/hello" .
-      NAME=$(buildkite-agent meta-data get "user-name")
-      echo 'my name is $NAME'
+      NAME=$(buildkite-agent meta-data get name)
       echo $NAME
       chmod +x dist/hello
       ./dist/hello $NAME
