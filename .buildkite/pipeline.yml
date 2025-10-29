@@ -56,16 +56,19 @@
     command: |
       #!/bin/bash
 
-      echo "=== All BUILDKITE environment variables ==="
-      env | grep BUILDKITE || true
+      buildkite-agent meta-data get --help
 
-      echo ""
-      echo "=== All environment variables ==="
-      env | sort
+      buildkite-agent meta-data get name --debug
+
+      echo $(buildkite-agent meta-data get name)
+
+      NAME=$(buildkite-agent meta-data get "name")
+      echo 'my name is $NAME'
 
       mkdir -p bins && cd bins
       buildkite-agent artifact download "dist/hello" .
       chmod +x dist/hello
-      ./dist/hello "World"
+
+      ./dist/hello $NAME
     agents:
       queue: "default" # Or a specific queue for your EC2 agents
