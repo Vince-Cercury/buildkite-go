@@ -52,6 +52,8 @@
         key: "name"
 
   - label: "Run Hello World"
+    agents:
+      queue: gcloud
     depends_on: "question"
     command: |
       #!/bin/bash
@@ -61,5 +63,3 @@
       chmod +x dist/hello
 
       ./dist/hello $(buildkite-agent meta-data get name)
-    agents:
-      queue: "default" # Or a specific queue for your EC2 agents
