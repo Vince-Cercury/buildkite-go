@@ -1,0 +1,12 @@
+# values.yml
+agentToken: "<INSERT YOUR BUILDKITE AGENT TOKEN>"
+Optionally:
+config:
+  tags:
+    - queue=gcloud
+  pod-spec-patch:
+    containers:
+    - name: checkout                    # <---- this is needed for the secret to only be mounted on the checkout container
+      envFrom:
+      - secretRef:
+          name: my-git-ssh-credentials  # <---- this is an example name of the Kubernetes Secret
