@@ -54,7 +54,7 @@
   - label: "Run Hello World"
     command: |
       NAME=$(buildkite-agent meta-data get "user-name")
-      buildkite-agent artifact download dist/hello
+      buildkite-agent artifact download "dist/hello"
       ./hello $NAME
     agents:
       queue: "default" # Or a specific queue for your EC2 agents
