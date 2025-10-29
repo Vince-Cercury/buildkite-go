@@ -4,6 +4,8 @@ steps:
     artifact_paths: "hello/junit-report.xml"
     plugins:
       - docker#v5.13.0:
+          environment:
+            - BUILDKITE_ANALYTICS_TOKEN
           image: "golang:1.18.0"
       - test-collector#v1.0.0:
           files: "hello/junit-*.xml"
