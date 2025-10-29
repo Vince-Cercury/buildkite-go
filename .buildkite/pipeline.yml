@@ -1,4 +1,5 @@
 steps:
+# We use go-junit-report to produce Junit xml for consumption by The Buildkite Test Engine
   - label: "🔨 Test"
     key: "tests"
     command: |
@@ -12,6 +13,7 @@ steps:
 
   - wait
 
+# This could have been a single step with the Test. We use artifact to move the results across steps
   - label: "🔍 Test Engine"
     depends_on: "tests"
     command: buildkite-agent artifact download "hello/junit-report.xml" .
@@ -22,6 +24,7 @@ steps:
     secrets:
       BUILDKITE_ANALYTICS_TOKEN: MY_BUILDKITE_ANALYTICS_TOKEN_SECRET
 
+# Building the go project
   - command: "go build -o dist/hello ./hello"
     artifact_paths: "./dist/hello"
     plugins:
@@ -34,6 +37,7 @@ steps:
       - text: "What is your name?"
         key: "name"
 
+# Run on Kubernetes
   - label: "Run Hello World"
     agents:
       queue: gcloud
