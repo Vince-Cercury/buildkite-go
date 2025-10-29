@@ -30,12 +30,12 @@ steps:
 
   - label: "🔍 Test Engine"
     command: buildkite-agent artifact download "tests-*.xml" .
+    environment:
+      BUILDKITE_ANALYTICS_TOKEN: AovmSRd8i6y34rqvt8poPgxZ
     plugins:
       - test-collector#v1.11.0:
           files: "tests-*.xml"
           format: "junit"
-      - environment:
-          - BUILDKITE_ANALYTICS_TOKEN=AovmSRd8i6y34rqvt8poPgxZ
 
   - command: "go build -o dist/hello ./hello"
     artifact_paths: "./dist/hello"
