@@ -56,7 +56,7 @@
       #!/bin/bash
       mkdir bins && cd bins
       buildkite-agent artifact download "dist/hello" .
-      NAME=$(buildkite-agent meta-data get name)
+      NAME=$(buildkite-agent meta-data get "name" --debug)
       echo $NAME
       chmod +x dist/hello
       ./dist/hello $NAME
