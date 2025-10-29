@@ -57,7 +57,9 @@
       cd bins
       buildkite-agent artifact download "dist/hello" .
       NAME=$(buildkite-agent meta-data get "user-name")
-      chmod +x hello
-      ./hello $NAME
+      echo $NAME
+      ls -al
+      chmod +x dist/hello
+      ./dist/hello $NAME
     agents:
       queue: "default" # Or a specific queue for your EC2 agents
