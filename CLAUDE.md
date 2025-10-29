@@ -35,6 +35,15 @@ Run a single test:
 cd hello && go test -v -run TestGreet
 ```
 
+Generate JUnit XML report (requires go-junit-report):
+```bash
+# Install go-junit-report if not already installed
+go install github.com/jstemmer/go-junit-report/v2@latest
+
+# Generate report
+cd hello && go test -v 2>&1 | ~/go/bin/go-junit-report -set-exit-code > junit-report.xml
+```
+
 ## Project Structure
 
 - `hello/hello.go` - Main application entry point. Simple CLI tool that accepts names as command-line arguments and prints a greeting. Contains a `Greet(name string)` function that generates greeting messages.

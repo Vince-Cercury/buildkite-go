@@ -1,8 +1,13 @@
 steps:
-  - command: "go test -v ./hello"
+  - label: "🔨 Test"
+    command: "cd hello && go test -v 2>&1 | ~/go/bin/go-junit-report -set-exit-code > junit-report.xml"
+    artifact_paths: "hello/junit-report.xml"
     plugins:
       - docker#v5.13.0:
           image: "golang:1.18.0"
+      - test-collector#v1.0.0:
+          files: "hello/junit-*.xml"
+          format: "junit"
   - command: "go build -o dist/hello ./hello"
     artifact_paths: "./dist/hello"
     plugins:
