@@ -22,9 +22,16 @@ import (
         "os"
 )
 
+// Greet generates a greeting message for the given name.
+func Greet(name string) string {
+	if name == "" {
+		return "Hello, World!"
+	}
+	return "Hello, " + name + "!"
+}
+
 func main() {
-	
-	name := strings.Join(os.Args[1:]," ")
-	response := "Hello, " + name + "!"
+	name := strings.Join(os.Args[1:], " ")
+	response := Greet(name)
 	fmt.Println(response)
 }
