@@ -56,19 +56,10 @@
     command: |
       #!/bin/bash
 
-      buildkite-agent meta-data get --help
-
-      buildkite-agent meta-data get name --debug
-
-      echo $(buildkite-agent meta-data get name)
-
-      NAME=$(buildkite-agent meta-data get "name")
-      echo 'my name is $NAME'
-
       mkdir -p bins && cd bins
       buildkite-agent artifact download "dist/hello" .
       chmod +x dist/hello
 
-      ./dist/hello $NAME
+      ./dist/hello $(buildkite-agent meta-data get name)
     agents:
       queue: "default" # Or a specific queue for your EC2 agents
