@@ -16,7 +16,7 @@
 #           format: "junit"
   # Run tests and upload
 
-  - label: "🔨 Test"
+  - label: "Test"
     command: |
       go install github.com/jstemmer/go-junit-report/v2@latest
 
@@ -29,6 +29,7 @@
   - wait
 
   - label: "🔍 Test Engine"
+    depends_on: "Test"
     command: buildkite-agent artifact download "tests-*.xml" .
     plugins:
       - test-collector#v1.11.0:
