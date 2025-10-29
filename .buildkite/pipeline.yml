@@ -36,8 +36,8 @@
       - test-collector#v1.11.0:
           files: "hello/junit-report.xml"
           format: "junit"
-          environment:
-            - BUILDKITE_ANALYTICS_TOKEN: AovmSRd8i6y34rqvt8poPgxZ
+    secrets:
+      BUILDKITE_ANALYTICS_TOKEN: MY_BUILDKITE_ANALYTICS_TOKEN_SECRET
 
   - command: "go build -o dist/hello ./hello"
     artifact_paths: "./dist/hello"
